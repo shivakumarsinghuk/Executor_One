@@ -1,0 +1,18 @@
+[submodule "BrokerUtility"]
+	path = BrokerUtility
+	url = https://github.com/shivakumarsinghuk/BrokerUtility.git
+[submodule "BusinessLogic/Utility"]
+	path = BusinessLogic/Utility
+	url = https://github.com/shivakumarsinghuk/Utility.git
+[submodule "Utility"]
+	path = Utility
+	url = https://github.com/shivakumarsinghuk/Utility.git
+[submodule "BusinessLogic/example_logic"]
+	path = BusinessLogic/example_logic
+	url = https://github.com/shivakumarsinghuk/example_logic.git
+[submodule "BusinessLogic/DataTypes"]
+	path = BusinessLogic/DataTypes
+	url = https://github.com/shivakumarsinghuk/DataTypes.git
+[submodule "DataTypes"]
+	path = DataTypes
+	url = https://github.com/shivakumarsinghuk/DataTypes.git
