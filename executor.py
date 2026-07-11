@@ -21,7 +21,13 @@ if __name__ == "__main__":
     #construct nse utility
     obj_nse_utility = nse_utitlity()
     obj_broker_utitility_manager:utility_manager = utility_manager()
-    obj_example_logic_interface.create(args, obj_broker_utitility_manager)
+    obj_quotes_utility: QuoteUtility = QuoteUtility()
+    obj_example_logic_interface.create(args, obj_broker_utitility_manager, obj_quotes_utility)
+
+    #set the broker utility of quotes utility - this is must
+    #use broker utility of any business logic and set it
+    obj_quotes_utility.set_trade_utility(obj_example_logic_interface.get_broker_utility())
+
     print("Calling wait for completion")
     obj_example_logic_interface.wait_for_completion()
     print("Exiting from main")

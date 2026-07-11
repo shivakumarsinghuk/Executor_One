@@ -4,6 +4,7 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/BrokerUtility" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/BusinessLogic/example_logic" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/DataTypes" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Utility" vcs="Git" />
   </component>
 </project>
