@@ -15,3 +15,6 @@ class ILogicInterface:
 
     def get_broker(self):
         print("Parent IUserInterfaceLogin get broker function")
+
+    def get_broker_utility(self):
+        print("Parent IUserInterfaceLogin get broker function")
