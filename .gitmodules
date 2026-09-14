@@ -20,3 +20,6 @@
 	path = BusinessLogic/vwappiercing_options
 	url = https://github.com/ranand2201/vwappiercing_options.git
 	branch = dev
+[submodule "BusinessLogic/vwap_piercing_option_buy"]
+	path = BusinessLogic/vwap_piercing_option_buy
+	url = https://github.com/shivakumarsinghuk/vwap_piercing_option_buy.git
