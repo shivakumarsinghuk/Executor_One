@@ -13,6 +13,11 @@ class ILogicInterface:
     def wait_for_completion(self):
         print("Parent IUserInterfaceLogin set function")
 
+    def force_close_open_trade(self):
+        # Default no-op: executor.py calls this on every logic after its threads join, but only
+        # logics that hold live positions across shutdown need to override it.
+        pass
+
     def get_broker(self):
         print("Parent IUserInterfaceLogin get broker function")
 
