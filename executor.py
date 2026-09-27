@@ -8,6 +8,7 @@ from BusinessLogic.vwappiercing_options.interfaces import (
     LogicVwapPiercingOptionsInterface as LogicVwapPiercingOptionsSellInterface)
 from BusinessLogic.vwap_piercing_option_buy.interfaces import (
     LogicVwapPiercingOptionsInterface as LogicVwapPiercingOptionsBuyInterface)
+from BusinessLogic.sd1sd2.interfaces import LogicSD1SD2Interface
 from Utility.nse_utility import *
 from BrokerUtility.pal.utility_manager import *
 from Utility.quotes_utility import *
@@ -15,7 +16,8 @@ from Utility.quotes_utility import *
 LOGIC_REGISTRY = {
     "example": LogicExampleInterface,
     "vwap_piercing_options": LogicVwapPiercingOptionsSellInterface,
-    "vwap_piercing_options_buy": LogicVwapPiercingOptionsBuyInterface
+    "vwap_piercing_options_buy": LogicVwapPiercingOptionsBuyInterface,
+    "sd1sd2": LogicSD1SD2Interface
 }
 
 def str_to_bool(value):
