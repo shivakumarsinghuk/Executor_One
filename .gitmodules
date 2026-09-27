@@ -23,3 +23,6 @@
 [submodule "BusinessLogic/vwap_piercing_option_buy"]
 	path = BusinessLogic/vwap_piercing_option_buy
 	url = https://github.com/shivakumarsinghuk/vwap_piercing_option_buy.git
+[submodule "BusinessLogic/sd1sd2"]
+	path = BusinessLogic/sd1sd2
+	url = https://github.com/ranand2201/sd1sd2.git
