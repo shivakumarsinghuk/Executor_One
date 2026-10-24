@@ -47,6 +47,8 @@ def validate_arguments(args=None):
                              "runs against that date's candles instead of today's")
     parser.add_argument("--date", type=valid_date,
                         help="Trading date YYYY-MM-DD to use when --test_mode is true")
+    parser.add_argument("--manual-kite-login", action="store_true",
+                        help="Print Kite login URL and prompt for the redirect URL instead of using Selenium")
     args = parser.parse_args()
     if args.test_mode and not args.date:
         parser.error("--date YYYY-MM-DD is required when --test_mode is true")
@@ -60,7 +62,8 @@ if __name__ == "__main__":
     args = validate_arguments()
     #construct nse utility
     obj_nse_utility = nse_utitlity()
-    obj_broker_utitility_manager:utility_manager = utility_manager()
+    obj_broker_utitility_manager:utility_manager = utility_manager(
+        manual_kite_login=args.manual_kite_login)
 
     logic_interfaces = []
     logic_types = set()
