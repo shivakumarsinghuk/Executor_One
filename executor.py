@@ -49,12 +49,19 @@ def validate_arguments(args=None):
                         help="Trading date YYYY-MM-DD to use when --test_mode is true")
     parser.add_argument("--manual-kite-login", action="store_true",
                         help="Print Kite login URL and prompt for the redirect URL instead of using Selenium")
-    args = parser.parse_args()
+    parser.add_argument("--candle-data-source", "--candle-source", dest="candle_source",
+                        choices=("websocket", "broker"), default="broker",
+                        help="Candle data source: websocket ticks or broker interface (default: broker)")
+    parser.add_argument("--quote-data-source", "--quote-source", dest="quote_source",
+                        choices=("websocket", "broker"), default="broker",
+                        help="Quote data source: websocket ticks or broker interface (default: broker)")
+    args = parser.parse_args(args)
     if args.test_mode and not args.date:
         parser.error("--date YYYY-MM-DD is required when --test_mode is true")
     if not args.test_mode:
         args.date = None
     print(args.userinterface, args.key, args.logic, "test_mode:", args.test_mode, "date:", args.date)
+    print("QuoteUtility sources: candles=", args.candle_source, "quotes=", args.quote_source)
     return args
 
 if __name__ == "__main__":
@@ -67,7 +74,8 @@ if __name__ == "__main__":
 
     logic_interfaces = []
     logic_types = set()
-    obj_quotes_utility: QuoteUtility = QuoteUtility()
+    obj_quotes_utility: QuoteUtility = QuoteUtility(
+        candle_source=args.candle_source, quote_source=args.quote_source)
     for logic_name in args.logic:
         logic_type = LOGIC_REGISTRY[logic_name]
         if logic_type in logic_types:
