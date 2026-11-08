@@ -47,6 +47,8 @@ def validate_arguments(args=None):
                              "runs against that date's candles instead of today's")
     parser.add_argument("--date", type=valid_date,
                         help="Trading date YYYY-MM-DD to use when --test_mode is true")
+    parser.add_argument("--test-option-symbol",
+                        help="Pin this CE/PE contract for its option type during a test-mode replay")
     parser.add_argument("--manual-kite-login", action="store_true",
                         help="Print Kite login URL and prompt for the redirect URL instead of using Selenium")
     parser.add_argument("--candle-data-source", "--candle-source", dest="candle_source",
@@ -58,6 +60,12 @@ def validate_arguments(args=None):
     args = parser.parse_args(args)
     if args.test_mode and not args.date:
         parser.error("--date YYYY-MM-DD is required when --test_mode is true")
+    if args.test_option_symbol is not None:
+        if not args.test_mode:
+            parser.error("--test-option-symbol can only be used with --test_mode true")
+        args.test_option_symbol = args.test_option_symbol.strip().upper()
+        if not args.test_option_symbol or not args.test_option_symbol.endswith(("CE", "PE")):
+            parser.error("--test-option-symbol must be a non-empty contract symbol ending in CE or PE")
     if not args.test_mode:
         args.date = None
     print(args.userinterface, args.key, args.logic, "test_mode:", args.test_mode, "date:", args.date)
@@ -96,4 +104,3 @@ if __name__ == "__main__":
         obj_logic_interface.wait_for_completion()
         obj_logic_interface.force_close_open_trade()
     print("Exiting from main")
-
