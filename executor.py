@@ -45,6 +45,8 @@ def validate_arguments(args=None):
     parser.add_argument("--test_mode", type=str_to_bool, default=False,
                         help="true/false (default false). When true, --date is required and the logic "
                              "runs against that date's candles instead of today's")
+    parser.add_argument("--log-to-gsheet", type=str_to_bool, default=True,
+                        help="true/false (default true). Disable output writes only; does not affect broker orders")
     parser.add_argument("--date", type=valid_date,
                         help="Trading date YYYY-MM-DD to use when --test_mode is true")
     parser.add_argument("--test-option-symbol",
@@ -68,7 +70,8 @@ def validate_arguments(args=None):
             parser.error("--test-option-symbol must be a non-empty contract symbol ending in CE or PE")
     if not args.test_mode:
         args.date = None
-    print(args.userinterface, args.key, args.logic, "test_mode:", args.test_mode, "date:", args.date)
+    print(args.userinterface, args.key, args.logic, "test_mode:", args.test_mode, "date:", args.date,
+          "log_to_gsheet:", args.log_to_gsheet)
     print("QuoteUtility sources: candles=", args.candle_source, "quotes=", args.quote_source)
     return args
 

@@ -41,9 +41,21 @@ python3 executor.py \
 - `--userinterface`: User interface to use. Currently supported: `gsheet`.
 - `--key`: Path to the broker credentials JSON file.
 - `--logic`: One or more registered logic names.
+- `--log-to-gsheet`: Enable or disable output writes to Google Sheets (`true`/`false`; default: `true`).
+  Sheet-backed login/config reads and broker order settings are unaffected.
 
 To see all options:
 
 ```bash
 python3 executor.py --help
+```
+
+To run without writing output to Google Sheets:
+
+```bash
+python3 executor.py \
+  --userinterface gsheet \
+  --key ../bankniftyorb-2b0a4e15319b.json \
+  --logic vwap_piercing_options_buy \
+  --log-to-gsheet false
 ```
