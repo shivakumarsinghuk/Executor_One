@@ -30,6 +30,9 @@ python3 executor.py \
   --logic vwap_piercing_options vwap_piercing_options_buy
 ```
 
+All selected logics share one market-data utility. The executor shuts it down
+after every selected logic has completed.
+
 ### Available logic names
 
 - `example`

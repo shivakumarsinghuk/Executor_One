@@ -35,6 +35,15 @@ def valid_date(value):
         raise argparse.ArgumentTypeError(f"expected date as YYYY-MM-DD, got '{value}'")
     return value
 
+def wait_for_logic_interfaces(logic_interfaces, quotes_utility):
+    try:
+        for logic_interface in logic_interfaces:
+            logic_interface.wait_for_completion()
+            logic_interface.force_close_open_trade()
+    finally:
+        quotes_utility.stop()
+        quotes_utility.get_thread_info().join()
+
 def validate_arguments(args=None):
     parser = argparse.ArgumentParser(description="Demo script with named args")
 
@@ -103,7 +112,5 @@ if __name__ == "__main__":
         obj_quotes_utility.set_trade_utility(logic_interfaces[0].get_broker_utility())
 
     print("Calling wait for completion")
-    for obj_logic_interface in logic_interfaces:
-        obj_logic_interface.wait_for_completion()
-        obj_logic_interface.force_close_open_trade()
+    wait_for_logic_interfaces(logic_interfaces, obj_quotes_utility)
     print("Exiting from main")
