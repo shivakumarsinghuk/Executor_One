@@ -1,4 +1,7 @@
 import argparse
+import yaml
+
+from DataTypes.login_types import LogInData
 from BusinessLogic.example_logic.interfaces import *
 # Both modules name their entry class LogicVwapPiercingOptionsInterface, so a star import of the
 # second silently rebinds the first -- which is how "vwap_piercing_options" ended up resolving to
@@ -19,6 +22,43 @@ LOGIC_REGISTRY = {
     "vwap_piercing_options_buy": LogicVwapPiercingOptionsBuyInterface,
     "sd1sd2": LogicSD1SD2Interface
 }
+
+LOGIN_YAML_FIELDS = {
+    "broker": ("broker",),
+    "user_id": ("user_id", "user_name"),
+    "password": ("password", "pin"),
+    "api_key": ("api_key", "client_id"),
+    "api_secret_key": ("api_secret_key", "secret_id"),
+    "phone_no": ("phone_no",),
+    "totp_key": ("totp_key", "totp"),
+}
+
+
+def load_login_yaml(path):
+    try:
+        with open(path, encoding="utf-8") as login_file:
+            config = yaml.safe_load(login_file)
+    except OSError as exc:
+        raise ValueError(f"could not read login YAML file '{path}': {exc}") from exc
+    except yaml.YAMLError as exc:
+        raise ValueError(f"invalid login YAML file '{path}': {exc}") from exc
+
+    if not isinstance(config, dict):
+        raise ValueError("login YAML must contain a mapping of login fields")
+
+    values = {}
+    for field, aliases in LOGIN_YAML_FIELDS.items():
+        value = next((config[key] for key in aliases if key in config), "")
+        if isinstance(value, bool) or not isinstance(value, (str, int)):
+            raise ValueError(f"login YAML field '{field}' must be a string or integer")
+        values[field] = str(value)
+
+    for field in ("broker", "user_id"):
+        if not values[field].strip():
+            raise ValueError(f"login YAML is missing required field '{field}'")
+
+    return LogInData(**values)
+
 
 def str_to_bool(value):
     if value.lower() in ("true", "1", "yes"):
@@ -49,6 +89,8 @@ def validate_arguments(args=None):
 
     parser.add_argument("--userinterface", type=str, required=True, help="User Interface Supported [gsheet]")
     parser.add_argument("--key", type=str, help="Provide the json file")
+    parser.add_argument("--login-yaml", "--login-config", dest="login_yaml",
+                        help="Path to YAML file containing broker login data")
     parser.add_argument("--logic", type=str, nargs="+", default=["example"], choices=LOGIC_REGISTRY,
                         help=f"Business logic to run {list(LOGIC_REGISTRY.keys())}")
     parser.add_argument("--test_mode", type=str_to_bool, default=False,
@@ -69,6 +111,12 @@ def validate_arguments(args=None):
                         choices=("websocket", "broker"), default="broker",
                         help="Quote data source: websocket ticks or broker interface (default: broker)")
     args = parser.parse_args(args)
+    args.login_data = None
+    if args.login_yaml:
+        try:
+            args.login_data = load_login_yaml(args.login_yaml)
+        except ValueError as exc:
+            parser.error(str(exc))
     if args.test_mode and not args.date:
         parser.error("--date YYYY-MM-DD is required when --test_mode is true")
     if args.test_option_symbol is not None:
@@ -95,7 +143,8 @@ if __name__ == "__main__":
     logic_interfaces = []
     logic_types = set()
     obj_quotes_utility: QuoteUtility = QuoteUtility(
-        candle_source=args.candle_source, quote_source=args.quote_source)
+        candle_source=args.candle_source, quote_source=args.quote_source,
+        test_mode=args.test_mode)
     for logic_name in args.logic:
         logic_type = LOGIC_REGISTRY[logic_name]
         if logic_type in logic_types:
